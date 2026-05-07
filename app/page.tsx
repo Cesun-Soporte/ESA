@@ -84,12 +84,18 @@ export default function Home() {
         }),
       })
 
-      if (!responseCSV.ok) {
-        const errorData = await responseCSV.json()
-        throw new Error(errorData.error || "Error al generar el archivo CSV")
+      if (!csvResponse.ok) {
+        let errorMsg = "Error al exportar CSV"
+        try {
+          const errorData = await csvResponse.json()
+          errorMsg = errorData.error || errorMsg
+        } catch (e) {
+          errorMsg = `Error del servidor (${csvResponse.status})`
+        }
+        throw new Error(errorMsg)
       }
 
-      const blobCSV = await responseCSV.blob()
+      const blobCSV = await csvResponse.blob()
       const urlCSV = window.URL.createObjectURL(blobCSV)
       const aCSV = document.createElement("a")
       aCSV.href = urlCSV
@@ -99,7 +105,7 @@ export default function Home() {
       window.URL.revokeObjectURL(urlCSV)
       document.body.removeChild(aCSV)
 
-      const contentDisposition = responseExcel.headers.get("X-Total-Records")
+      const contentDisposition = excelResponse.headers.get("X-Total-Records")
       const records = contentDisposition ? parseInt(contentDisposition) : 0
       setTotalRecords(records)
 
