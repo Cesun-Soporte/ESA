@@ -5,8 +5,8 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "ESA Encuestas - Sistema de Exportación",
-  description: "Sistema de exportación de encuestas estudiantiles - CESUN Universidad",
+  title: "Encuesta de Satisfacción Académica - CESUN Universidad",
+  description: "Sistema de exportación de Encuestas de Satisfacción Académica - CESUN Universidad",
 }
 
 export default function RootLayout({

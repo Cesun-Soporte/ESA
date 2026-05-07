@@ -1,7 +1,7 @@
 {
-  "name": "esa-encuestas-web",
+  "name": "encuesta-satisfaccion-academica",
   "version": "1.0.0",
-  "description": "Sistema web de exportación de encuestas ESA - CESUN Universidad",
+  "description": "Sistema web de exportación de Encuestas de Satisfacción Académica - CESUN Universidad",
   "private": true,
   "scripts": {
     "dev": "next dev",
