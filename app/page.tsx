@@ -74,7 +74,7 @@ export default function Home() {
       setProgress(60)
       setStatus("Generando archivo CSV...")
 
-      const responseCSV = await fetch("/api/export", {
+      const csvResponse = await fetch("/api/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
