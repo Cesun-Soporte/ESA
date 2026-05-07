@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
-import { Calendar as CalendarIcon, Download, FileSpreadsheet, FileText, Loader2 } from "lucide-react"
+import { Calendar as CalendarIcon, Download, FileSpreadsheet, FileText, Loader2, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,6 +14,8 @@ import { cn } from "@/lib/utils"
 import Image from "next/image"
 
 export default function Home() {
+  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
   const [loading, setLoading] = useState(false)
@@ -20,6 +23,24 @@ export default function Home() {
   const [status, setStatus] = useState("")
   const [error, setError] = useState("")
   const [totalRecords, setTotalRecords] = useState(0)
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem("isAuthenticated")
+    if (!authStatus) {
+      router.push("/login")
+    } else {
+      setIsAuthenticated(true)
+    }
+  }, [router])
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated")
+    router.push("/login")
+  }
+
+  if (!isAuthenticated) {
+    return null
+  }
 
   const handleExport = async () => {
     if (!startDate || !endDate) {
@@ -135,7 +156,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto w-full">
           {/* Header with Logo */}
           <div className="text-center mb-4 md:mb-5 space-y-2 md:space-y-3">
-            <div className="flex justify-center mb-3 md:mb-4 animate-fade-in">
+            <div className="flex justify-center items-start mb-3 md:mb-4 animate-fade-in relative">
               <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-2xl border border-white/20">
                 <Image
                   src="/cesun-logo.png"
@@ -146,6 +167,15 @@ export default function Home() {
                   className="object-contain w-40 sm:w-48 md:w-52 h-auto drop-shadow-2xl"
                 />
               </div>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="absolute right-0 top-0 bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 hover:text-white"
+                size="sm"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Cerrar Sesión</span>
+              </Button>
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 md:mb-2 px-4 drop-shadow-lg">
               Sistema de Exportación de Encuestas

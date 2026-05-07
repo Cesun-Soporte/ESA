@@ -114,25 +114,25 @@ export async function POST(request: NextRequest) {
 
     worksheet.columns = columns
 
-    worksheet.getRow(1).font = { bold: true, size: 11 }
-    worksheet.getRow(1).fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FF4472C4' },
-    }
-    worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }
-    worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' }
-    worksheet.getRow(1).height = 25
-
-    columns.forEach((col, index) => {
-      const cell = worksheet.getRow(1).getCell(index + 1)
+    // Aplicar formato solo hasta la columna L (12 columnas)
+    for (let colIndex = 1; colIndex <= 12; colIndex++) {
+      const cell = worksheet.getRow(1).getCell(colIndex)
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 }
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF4472C4' },
+      }
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
       cell.border = {
         top: { style: 'thin', color: { argb: 'FF000000' } },
         left: { style: 'thin', color: { argb: 'FF000000' } },
         bottom: { style: 'thin', color: { argb: 'FF000000' } },
         right: { style: 'thin', color: { argb: 'FF000000' } },
       }
-    })
+    }
+    
+    worksheet.getRow(1).height = 25
 
     processedData.forEach((row) => {
       const excelRow = worksheet.addRow(row)
