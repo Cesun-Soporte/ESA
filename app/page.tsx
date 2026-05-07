@@ -114,24 +114,31 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600 flex flex-col">
-      <div className="flex-grow flex flex-col justify-center p-4 sm:p-6 md:p-8 lg:p-10">
+    <main className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex flex-col relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
+      
+      <div className="flex-grow flex flex-col justify-center p-4 sm:p-6 md:p-8 lg:p-10 relative z-10">
         <div className="max-w-5xl mx-auto w-full">
+          {/* Header with Logo */}
           <div className="text-center mb-6 md:mb-8 space-y-3 md:space-y-4">
-            <div className="flex justify-center mb-4 md:mb-6">
-              <Image
-                src="/cesun-logo.png"
-                alt="CESUN Universidad"
-                width={280}
-                height={120}
-                priority
-                className="object-contain w-48 sm:w-56 md:w-64 lg:w-72 h-auto"
-              />
+            <div className="flex justify-center mb-4 md:mb-6 animate-fade-in">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-2xl border border-white/20">
+                <Image
+                  src="/cesun-logo.png"
+                  alt="CESUN Universidad"
+                  width={280}
+                  height={120}
+                  priority
+                  className="object-contain w-48 sm:w-56 md:w-64 lg:w-72 h-auto drop-shadow-2xl"
+                />
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 md:mb-3 px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 md:mb-3 px-4 drop-shadow-lg">
               Sistema de Exportación de Encuestas
             </h1>
-            <p className="text-lg sm:text-xl text-blue-100 px-4">
+            <p className="text-lg sm:text-xl md:text-2xl text-blue-100 px-4 font-medium">
               Encuesta de Satisfacción Académica
             </p>
             <p className="text-base sm:text-lg text-blue-200 px-4">
@@ -139,31 +146,36 @@ export default function Home() {
             </p>
           </div>
 
-          <Card className="shadow-2xl border-2 border-blue-200 mx-2 sm:mx-4 md:mx-0">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-6">
-              <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl">
-                <FileSpreadsheet className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
+          <Card className="shadow-2xl border-2 border-white/30 mx-2 sm:mx-4 md:mx-0 bg-white/95 backdrop-blur-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-600 p-6 sm:p-8 text-white">
+              <CardTitle className="flex items-center gap-3 text-2xl sm:text-3xl font-bold">
+                <div className="bg-white/20 p-2 sm:p-3 rounded-lg backdrop-blur-sm">
+                  <FileSpreadsheet className="h-7 w-7 sm:h-8 sm:w-8" />
+                </div>
                 Exportar Encuestas
               </CardTitle>
-              <CardDescription className="text-sm sm:text-base">
+              <CardDescription className="text-sm sm:text-base text-blue-100 mt-2">
                 Selecciona el rango de fechas y exporta en Excel y CSV simultáneamente
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6 pt-4 sm:pt-6">
-            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="start-date" className="text-sm sm:text-base">Fecha de Inicio</Label>
+            <CardContent className="space-y-5 sm:space-y-7 p-5 sm:p-8 pt-6 sm:pt-8">
+            <div className="grid gap-5 sm:gap-6 sm:grid-cols-2">
+              <div className="space-y-3">
+                <Label htmlFor="start-date" className="text-sm sm:text-base font-semibold text-gray-700 flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-blue-600" />
+                  Fecha de Inicio
+                </Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       id="start-date"
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal",
+                        "w-full justify-start text-left font-normal h-12 border-2 hover:border-blue-500 hover:bg-blue-50 transition-all",
                         !startDate && "text-muted-foreground"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <CalendarIcon className="mr-2 h-5 w-5" />
                       {startDate ? format(startDate, "PPP", { locale: es }) : "Selecciona fecha"}
                     </Button>
                   </PopoverTrigger>
@@ -178,19 +190,22 @@ export default function Home() {
                 </Popover>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="end-date" className="text-sm sm:text-base">Fecha de Fin</Label>
+              <div className="space-y-3">
+                <Label htmlFor="end-date" className="text-sm sm:text-base font-semibold text-gray-700 flex items-center gap-2">
+                  <CalendarIcon className="h-4 w-4 text-blue-600" />
+                  Fecha de Fin
+                </Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       id="end-date"
                       variant="outline"
                       className={cn(
-                        "w-full justify-start text-left font-normal",
+                        "w-full justify-start text-left font-normal h-12 border-2 hover:border-blue-500 hover:bg-blue-50 transition-all",
                         !endDate && "text-muted-foreground"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <CalendarIcon className="mr-2 h-5 w-5" />
                       {endDate ? format(endDate, "PPP", { locale: es }) : "Selecciona fecha"}
                     </Button>
                   </PopoverTrigger>
@@ -206,19 +221,35 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border-2 border-blue-200">
-              <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                <FileSpreadsheet className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 flex-shrink-0" />
-                <h3 className="font-semibold text-sm sm:text-base text-blue-900">Archivos a Exportar</h3>
-              </div>
-              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-blue-800">
-                  <FileSpreadsheet className="h-4 w-4 flex-shrink-0" />
-                  <span>Excel (.xlsx)</span>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 sm:p-6 rounded-xl border-2 border-blue-200 shadow-md">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-blue-600 p-2 rounded-lg">
+                  <FileSpreadsheet className="h-5 w-5 sm:h-6 sm:w-6 text-white flex-shrink-0" />
                 </div>
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-blue-800">
-                  <FileText className="h-4 w-4 flex-shrink-0" />
-                  <span>CSV (.csv)</span>
+                <h3 className="font-bold text-base sm:text-lg text-blue-900">Archivos a Exportar</h3>
+              </div>
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <FileSpreadsheet className="h-6 w-6 text-green-600 flex-shrink-0" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-800">Excel</p>
+                      <p className="text-xs text-gray-500">.xlsx</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-blue-200 hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-orange-100 p-2 rounded-lg">
+                      <FileText className="h-6 w-6 text-orange-600 flex-shrink-0" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm text-gray-800">CSV</p>
+                      <p className="text-xs text-gray-500">.csv</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,44 +278,54 @@ export default function Home() {
             <Button
               onClick={handleExport}
               disabled={loading || !startDate || !endDate}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm sm:text-base"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none h-14"
               size="lg"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
                   <span className="hidden xs:inline">Exportando...</span>
                   <span className="xs:hidden">Exportando</span>
                 </>
               ) : (
                 <>
-                  <Download className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <Download className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
                   <span className="hidden xs:inline">Exportar Excel y CSV</span>
                   <span className="xs:hidden">Exportar</span>
                 </>
               )}
             </Button>
 
-            <div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4 bg-blue-50 p-3 sm:p-4 rounded-lg">
-              <h3 className="font-semibold text-sm sm:text-base text-blue-900 mb-2 sm:mb-3 flex items-center gap-2">
-                <FileSpreadsheet className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <div className="border-t-2 border-gray-200 pt-4 sm:pt-5 mt-4 sm:mt-5 bg-gradient-to-r from-gray-50 to-blue-50 p-4 sm:p-5 rounded-xl shadow-sm">
+              <h3 className="font-bold text-base sm:text-lg text-gray-800 mb-3 sm:mb-4 flex items-center gap-2">
+                <div className="bg-blue-600 p-1.5 rounded-md">
+                  <FileSpreadsheet className="h-4 w-4 sm:h-5 sm:w-5 text-white flex-shrink-0" />
+                </div>
                 Información de Exportación
               </h3>
-              <ul className="text-xs sm:text-sm text-blue-800 space-y-1.5 sm:space-y-2">
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-600 mt-0.5 flex-shrink-0">•</span>
-                  <span><strong className="font-semibold">Descarga automática de 2 archivos:</strong> Excel (.xlsx) y CSV (.csv)</span>
+              <ul className="text-xs sm:text-sm text-gray-700 space-y-2 sm:space-y-2.5">
+                <li className="flex items-start gap-2 sm:gap-3 bg-white p-2 sm:p-3 rounded-lg shadow-sm">
+                  <div className="bg-blue-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                    <Download className="h-3 w-3 text-blue-600" />
+                  </div>
+                  <span><strong className="font-semibold text-gray-900">Descarga automática de 2 archivos:</strong> Excel (.xlsx) y CSV (.csv)</span>
                 </li>
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-600 mt-0.5 flex-shrink-0">•</span>
+                <li className="flex items-start gap-2 sm:gap-3 bg-white p-2 sm:p-3 rounded-lg shadow-sm">
+                  <div className="bg-green-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                    <FileSpreadsheet className="h-3 w-3 text-green-600" />
+                  </div>
                   <span>Ambos archivos tienen el mismo nombre con timestamp único</span>
                 </li>
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-600 mt-0.5 flex-shrink-0">•</span>
+                <li className="flex items-start gap-2 sm:gap-3 bg-white p-2 sm:p-3 rounded-lg shadow-sm">
+                  <div className="bg-purple-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                    <FileSpreadsheet className="h-3 w-3 text-purple-600" />
+                  </div>
                   <span>Excel: Formato profesional con colores y encabezados fijos</span>
                 </li>
-                <li className="flex items-start gap-1.5 sm:gap-2">
-                  <span className="text-blue-600 mt-0.5 flex-shrink-0">•</span>
+                <li className="flex items-start gap-2 sm:gap-3 bg-white p-2 sm:p-3 rounded-lg shadow-sm">
+                  <div className="bg-orange-100 p-1 rounded-full mt-0.5 flex-shrink-0">
+                    <FileText className="h-3 w-3 text-orange-600" />
+                  </div>
                   <span>CSV: Compatible con Excel, Google Sheets y otros programas</span>
                 </li>
               </ul>
@@ -292,12 +333,14 @@ export default function Home() {
           </CardContent>
         </Card>
 
-          <footer className="text-center mt-6 sm:mt-8 text-xs sm:text-sm text-white px-4 pb-4">
-            <p className="font-medium mb-1">© 2026 CESUN Universidad</p>
-            <p className="text-blue-200 mb-2">Sistema de Exportación de Encuestas de Satisfacción Académica</p>
-            <p className="text-blue-300 text-xs sm:text-sm">
-              Desarrollado por el Departamento de Infraestructura y Tecnologías de la Información
-            </p>
+          <footer className="text-center mt-8 sm:mt-10 text-xs sm:text-sm text-white px-4 pb-6">
+            <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 sm:p-5 border border-white/20">
+              <p className="font-bold mb-2 text-base">© 2026 CESUN Universidad</p>
+              <p className="text-blue-100 mb-2 font-medium">Sistema de Exportación de Encuestas de Satisfacción Académica</p>
+              <p className="text-blue-200 text-xs sm:text-sm">
+                Desarrollado por el Departamento de Infraestructura y Tecnologías de la Información
+              </p>
+            </div>
           </footer>
         </div>
       </div>
