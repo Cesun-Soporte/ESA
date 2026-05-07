@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sistema de Exportación de Encuestas ESA
 
 Sistema automatizado para exportar encuestas estudiantiles desde la base de datos Moodle.
@@ -144,3 +145,6 @@ Para soporte técnico, contacta al departamento de TI de CESUN Universidad.
 ---
 
 **© 2026 CESUN Universidad - Sistema de Exportación ESA**
+=======
+# ESA
+>>>>>>> 12b2c2aa92fe9cc7d2b8e09b82fc28808daf43f4
