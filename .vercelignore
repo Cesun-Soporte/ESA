@@ -1,0 +1,17 @@
+# Python files
+*.py
+__pycache__/
+*.pyc
+
+# Local development
+.env.local
+.env*.local
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+DEPLOYMENT.md
+INSTRUCCIONES.md
