@@ -92,7 +92,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="usuario@cesun.edu.mx"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                   required
                   className="h-11 border-2 focus:border-blue-500"
                 />
@@ -108,7 +108,7 @@ export default function LoginPage() {
                   type="password"
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                   required
                   className="h-11 border-2 focus:border-blue-500"
                 />
