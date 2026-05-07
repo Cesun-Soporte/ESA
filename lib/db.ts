@@ -6,10 +6,20 @@ const config = {
   password: process.env.DB_PASSWORD || 'mrK2ObaGAP7VIAuLtdeP',
   database: process.env.DB_NAME || 'mx-emprove-cesun01',
   connectTimeout: 30000,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 }
 
 export async function getConnection() {
-  return await mysql.createConnection(config)
+  try {
+    const connection = await mysql.createConnection(config)
+    await connection.ping()
+    return connection
+  } catch (error: any) {
+    console.error('Error conectando a la base de datos:', error)
+    throw new Error(`Error de conexión a la base de datos: ${error.message}`)
+  }
 }
 
 export const QUERY_TEMPLATE = `

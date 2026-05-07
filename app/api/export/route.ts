@@ -7,25 +7,51 @@ export async function POST(request: NextRequest) {
   let connection
 
   try {
-    const body = await request.json()
-    const { startDate, endDate, format = 'xlsx' } = body
-
-    if (!startDate || !endDate) {
+    let body
+    try {
+      body = await request.json()
+    } catch (e) {
       return NextResponse.json(
-        { error: 'Fechas requeridas' },
+        { error: 'Datos inválidos en la solicitud' },
         { status: 400 }
       )
     }
 
-    connection = await getConnection()
+    const { startDate, endDate, format = 'xlsx' } = body
+
+    if (!startDate || !endDate) {
+      return NextResponse.json(
+        { error: 'Fechas de inicio y fin son requeridas' },
+        { status: 400 }
+      )
+    }
+
+    try {
+      connection = await getConnection()
+    } catch (dbError: any) {
+      console.error('Error de conexión a base de datos:', dbError)
+      return NextResponse.json(
+        { error: 'No se pudo conectar a la base de datos. Por favor intenta nuevamente.' },
+        { status: 503 }
+      )
+    }
 
     const startDateTime = `${startDate} 00:00:00`
     const endDateTime = `${endDate} 23:59:59`
 
-    const [rows] = await connection.execute(QUERY_TEMPLATE, [
-      startDateTime,
-      endDateTime,
-    ])
+    let rows
+    try {
+      [rows] = await connection.execute(QUERY_TEMPLATE, [
+        startDateTime,
+        endDateTime,
+      ])
+    } catch (queryError: any) {
+      console.error('Error ejecutando query:', queryError)
+      return NextResponse.json(
+        { error: 'Error al consultar los datos. Por favor verifica las fechas e intenta nuevamente.' },
+        { status: 500 }
+      )
+    }
 
     const processedData = processRows(rows as any[])
 
@@ -129,13 +155,29 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Error en exportación:', error)
+    
+    let errorMessage = 'Error al procesar la solicitud'
+    if (error.message) {
+      if (error.message.includes('connection')) {
+        errorMessage = 'Error de conexión a la base de datos'
+      } else if (error.message.includes('timeout')) {
+        errorMessage = 'La operación tardó demasiado. Intenta con un rango de fechas más pequeño.'
+      } else {
+        errorMessage = error.message
+      }
+    }
+    
     return NextResponse.json(
-      { error: error.message || 'Error al procesar la solicitud' },
+      { error: errorMessage },
       { status: 500 }
     )
   } finally {
     if (connection) {
-      await connection.end()
+      try {
+        await connection.end()
+      } catch (closeError) {
+        console.error('Error cerrando conexión:', closeError)
+      }
     }
   }
 }

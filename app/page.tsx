@@ -40,7 +40,7 @@ export default function Home() {
       setProgress(30)
       setStatus("Generando archivo Excel...")
 
-      const responseExcel = await fetch("/api/export", {
+      const excelResponse = await fetch("/api/export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,12 +50,18 @@ export default function Home() {
         }),
       })
 
-      if (!responseExcel.ok) {
-        const errorData = await responseExcel.json()
-        throw new Error(errorData.error || "Error al generar el archivo Excel")
+      if (!excelResponse.ok) {
+        let errorMsg = "Error al exportar Excel"
+        try {
+          const errorData = await excelResponse.json()
+          errorMsg = errorData.error || errorMsg
+        } catch (e) {
+          errorMsg = `Error del servidor (${excelResponse.status})`
+        }
+        throw new Error(errorMsg)
       }
 
-      const blobExcel = await responseExcel.blob()
+      const blobExcel = await excelResponse.blob()
       const urlExcel = window.URL.createObjectURL(blobExcel)
       const aExcel = document.createElement("a")
       aExcel.href = urlExcel
